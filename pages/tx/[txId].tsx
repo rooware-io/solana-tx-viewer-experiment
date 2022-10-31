@@ -13,7 +13,7 @@ import {
 } from "@solana/web3.js";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ProgramLogsCardBody } from "../../components/ProgramLogsCardBody";
 import { decompileCompiledIx } from "../../decoder/compiled-ix-decoder";
 import {
@@ -117,13 +117,17 @@ const DEFAULT_TX_ID =
 
 export default function Transaction() {
   const router = useRouter();
-  const [txId, setTxId] = useState(
-    (router.query.txId as string) ?? DEFAULT_TX_ID
-  );
+  const [txId, setTxId] = useState<string>();
+
+  useEffect(() => {
+    const queryTxId = router.query.txId as string;
+    setTxId(queryTxId);
+  }, [router.query]);
 
   const { data: versionedTransactionResponse } = useQuery(
     ["tx", txId],
     async () => {
+      if (!txId) return;
       const tx = connection.getTransaction(txId, {
         maxSupportedTransactionVersion: 0,
       });
@@ -290,7 +294,7 @@ export default function Transaction() {
                 {
                   pathname: router.pathname,
                   query: {
-                    tx: txId,
+                    txId,
                   },
                 },
                 undefined,
