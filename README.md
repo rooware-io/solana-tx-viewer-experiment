@@ -1,34 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# A solana transaction viewer
 
-## Getting Started
+A experiment at making an explorer with reasonable information density, surfacing the essentials by default while allowing deep dive
+Inspired by https://github.com/samczsun/ethereum-transaction-viewer-frontend
 
-First, run the development server:
+Area of work:
+- Almost all transactions contain token transfers, put particular care on displaying that data specifically
+- Do i really need to see all accounts at all times, account metas and other details? Hide by default what is only necessary for a deep debugging session
+- Parse with decoders and IDLs but that doesn't make it the final ingestable output, give a high level extract
+- Try to reduce repetitions and instead make the layout speak for itself
 
-```bash
-npm run dev
-# or
-yarn dev
+Pages of focus for now
+- Account with related transactions
+- Transaction
+
+Once this comes to mainnet validators remove the hack used to rebuild stack_height https://github.com/solana-labs/solana/pull/28430
+
+https://explorer.solana.com/tx/3KktLw5mbmiVW7733zpAy5sVZg8EA6oDZ6nRWSWSPqDh3zDr7tzuCT6gxHj9vDh2jJHdXtMnex2sstnwdh1xvGFA
+
+
+```
+curl 'https://api.mainnet-beta.solana.com/' \
+  -H 'content-type: application/json' \
+  --data-raw '{"method":"getTransaction","jsonrpc":"2.0","params":["3KktLw5mbmiVW7733zpAy5sVZg8EA6oDZ6nRWSWSPqDh3zDr7tzuCT6gxHj9vDh2jJHdXtMnex2sstnwdh1xvGFA",{"encoding":null,"commitment":"confirmed","maxSupportedTransactionVersion":0}]}'
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To compare with etherscan or samczun's viewer
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+https://etherscan.io/tx/0x9ef7a35012286fef17da12624aa124ebc785d9e7621e1fd538550d1209eb9f7d
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+https://tx.eth.samczsun.com/ethereum/0x9ef7a35012286fef17da12624aa124ebc785d9e7621e1fd538550d1209eb9f7d
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Other solana Txs:
 
-## Learn More
+depth of 3 for CPI https://solscan.io/tx/2k9ruymuLBwtHh4deW7GufU2WTuB2G6kZpvEUyfVaYsV16dmDTFA1X6WJAW7LjWMiZPcz7JPmsscmGsHKXJzAcJo
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
